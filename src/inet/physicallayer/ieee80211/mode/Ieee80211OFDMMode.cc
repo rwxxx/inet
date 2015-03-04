@@ -25,7 +25,7 @@ namespace physicallayer {
 
 bps Ieee80211OFDMChunkMode::computeGrossBitrate(const Ieee80211OFDMModulation *modulation) const
 {
-    int codedBitsPerOFDMSymbol = modulation->getSubcarrierModulation()->getCodeWordSize() * NUMBER_OF_OFDM_DATA_SUBCARRIERS;
+    int codedBitsPerOFDMSymbol = modulation->getSubcarrierModulation()->getCodeWordSize() * getNumberOfDataSubcarriers();
     return bps(codedBitsPerOFDMSymbol / getSymbolInterval());
 }
 

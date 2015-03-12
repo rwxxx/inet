@@ -52,7 +52,7 @@ namespace physicallayer {
  *    - More detailed description and validation can be found in
  *      http://www.nsnam.org/~pei/80211b.pdf
  */
-class Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
+class INET_API Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
 {
   protected:
     double Log2(double val) const;

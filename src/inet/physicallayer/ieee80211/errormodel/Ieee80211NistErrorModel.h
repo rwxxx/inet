@@ -36,7 +36,7 @@ namespace physicallayer {
  * http://www.nsnam.org/~pei/80211ofdm.pdf.  For DSSS modulations (802.11b),
  * the model uses the DsssErrorRateModel.
  */
-class Ieee80211NistErrorModel : public Ieee80211ErrorModelBase
+class INET_API Ieee80211NistErrorModel : public Ieee80211ErrorModelBase
 {
   protected:
     double CalculatePe(double p, uint32_t bValue) const;

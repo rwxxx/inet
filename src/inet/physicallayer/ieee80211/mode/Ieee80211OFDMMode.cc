@@ -143,7 +143,7 @@ const simtime_t Ieee80211OFDMDataMode::getDuration(int dataBitLength) const
 {
     // IEEE Std 802.11-2007, section 17.3.2.2, table 17-3
     // corresponds to N_{DBPS} in the table
-    int codedBitsPerOFDMSymbol = modulation->getSubcarrierModulation()->getCodeWordSize() * NUMBER_OF_OFDM_DATA_SUBCARRIERS;
+    int codedBitsPerOFDMSymbol = modulation->getSubcarrierModulation()->getCodeWordSize() * getNumberOfDataSubcarriers();
     const ConvolutionalCode *convolutionalCode = code ? code->getConvolutionalCode() : nullptr;
     int dataBitsPerOFDMSymbol;
     if (convolutionalCode)

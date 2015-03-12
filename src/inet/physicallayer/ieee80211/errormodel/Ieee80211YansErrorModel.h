@@ -1,22 +1,23 @@
-/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Copyright (c) 2005,2006 INRIA
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
- */
+//
+// Copyright (c) 2005, 2006 INRIA
+// Copyright (C) 2015 OpenSim Ltd.
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program; if not, see <http://www.gnu.org/licenses/>.
+//
+// Author: Mathieu Lacage <mathieu.lacage@sophia.inria.fr>
+//
+
 #ifndef __INET_IEEE80211YANSERRORMODEL_H
 #define __INET_IEEE80211YANSERRORMODEL_H
 
@@ -53,13 +54,7 @@ namespace physicallayer {
  */
 class Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
 {
-  public:
-    Ieee80211YansErrorModel();
-
-    virtual void printToStream(std::ostream& stream) const override { stream << "Ieee80211YansErrorModel"; }
-    virtual double GetChunkSuccessRate(const IIeee80211ChunkMode *chunkMode, double snr, uint32_t nbits) const override;
-
-  private:
+  protected:
     double Log2(double val) const;
     double GetBpskBer(double snr, Hz signalSpread, bps phyRate) const;
     double GetQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const;
@@ -68,14 +63,15 @@ class Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
     double CalculatePdOdd(double ber, unsigned int d) const;
     double CalculatePdEven(double ber, unsigned int d) const;
     double CalculatePd(double ber, unsigned int d) const;
-    double GetFecBpskBer(double snr, double nbits,
-            Hz signalSpread, bps phyRate,
-            uint32_t dFree, uint32_t adFree) const;
-    double GetFecQamBer(double snr, uint32_t nbits,
-            Hz signalSpread,
-            bps phyRate,
-            uint32_t m, uint32_t dfree,
-            uint32_t adFree, uint32_t adFreePlusOne) const;
+    double GetFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const;
+    double GetFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dfree, uint32_t adFree, uint32_t adFreePlusOne) const;
+
+  public:
+     Ieee80211YansErrorModel();
+
+     virtual void printToStream(std::ostream& stream) const override { stream << "Ieee80211YansErrorModel"; }
+     virtual double GetChunkSuccessRate(const IIeee80211ChunkMode *chunkMode, double snr, uint32_t nbits) const override;
+     virtual double getSuccessRate(const IIeee80211Mode *mode, unsigned int headerBitLength, unsigned int payloadBitLength, double snr) const override {return 0;}
 };
 
 } // namespace physicallayer

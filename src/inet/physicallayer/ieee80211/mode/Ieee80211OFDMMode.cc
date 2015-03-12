@@ -136,7 +136,7 @@ const simtime_t Ieee80211OFDMMode::getRxTxTurnaroundTime() const
 
 int Ieee80211OFDMDataMode::getBitLength(int dataBitLength) const
 {
-    return getServiceBitLength() + dataBitLength + getTailBitLength();
+    return getServiceBitLength() + dataBitLength + getTailBitLength(); // TODO: padding?
 }
 
 const simtime_t Ieee80211OFDMDataMode::getDuration(int dataBitLength) const

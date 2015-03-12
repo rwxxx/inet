@@ -55,7 +55,6 @@ namespace physicallayer {
 class INET_API Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
 {
   protected:
-    double Log2(double val) const;
     double GetBpskBer(double snr, Hz signalSpread, bps phyRate) const;
     double GetQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const;
     uint32_t Factorial(uint32_t k) const;

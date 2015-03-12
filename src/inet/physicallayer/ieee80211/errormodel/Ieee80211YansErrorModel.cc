@@ -26,7 +26,6 @@
 #include "inet/physicallayer/ieee80211/mode/Ieee80211HRDSSSMode.h"
 #include "inet/physicallayer/ieee80211/mode/Ieee80211OFDMMode.h"
 #include "inet/physicallayer/ieee80211/errormodel/Ieee80211YansErrorModel.h"
-#include <math.h>
 
 namespace inet {
 
@@ -36,11 +35,6 @@ Define_Module(Ieee80211YansErrorModel);
 
 Ieee80211YansErrorModel::Ieee80211YansErrorModel()
 {
-}
-
-double Ieee80211YansErrorModel::Log2(double val) const
-{
-    return log(val) / log(2.0);
 }
 
 double Ieee80211YansErrorModel::GetBpskBer(double snr, Hz signalSpread, bps phyRate) const
@@ -55,10 +49,10 @@ double Ieee80211YansErrorModel::GetBpskBer(double snr, Hz signalSpread, bps phyR
 double Ieee80211YansErrorModel::GetQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const
 {
     double EbNo = snr * signalSpread.get() / phyRate.get();
-    double z = sqrt((1.5 * Log2(m) * EbNo) / (m - 1.0));
+    double z = sqrt((1.5 * log2(m) * EbNo) / (m - 1.0));
     double z1 = ((1.0 - 1.0 / sqrt((double)m)) * erfc(z));
     double z2 = 1 - pow((1 - z1), 2.0);
-    double ber = z2 / Log2(m);
+    double ber = z2 / log2(m);
     EV << "Qam m=" << m << " rate=" << phyRate << " snr=" << snr << " ber=" << ber << endl;
     return ber;
 }

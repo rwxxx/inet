@@ -143,15 +143,11 @@ const simtime_t Ieee80211OFDMDataMode::getDuration(int dataBitLength) const
 {
     // IEEE Std 802.11-2007, section 17.3.2.2, table 17-3
     // corresponds to N_{DBPS} in the table
-    int codedBitsPerOFDMSymbol = modulation->getSubcarrierModulation()->getCodeWordSize() * getNumberOfDataSubcarriers();
+    unsigned int codedBitsPerOFDMSymbol = modulation->getSubcarrierModulation()->getCodeWordSize() * getNumberOfDataSubcarriers();
     const ConvolutionalCode *convolutionalCode = code ? code->getConvolutionalCode() : nullptr;
-    int dataBitsPerOFDMSymbol;
-    if (convolutionalCode)
-        dataBitsPerOFDMSymbol = codedBitsPerOFDMSymbol * convolutionalCode->getCodeRatePuncturingK() / convolutionalCode->getCodeRatePuncturingN();
-    else
-        dataBitsPerOFDMSymbol = codedBitsPerOFDMSymbol;
+    unsigned int dataBitsPerOFDMSymbol = convolutionalCode ? convolutionalCode->getDecodedLength(codedBitsPerOFDMSymbol) : codedBitsPerOFDMSymbol;
     // IEEE Std 802.11-2007, section 17.3.5.3, equation (17-11)
-    int numberOfSymbols = lrint(ceil((double)getBitLength(dataBitLength) / dataBitsPerOFDMSymbol));
+    unsigned int numberOfSymbols = lrint(ceil((double)getBitLength(dataBitLength) / dataBitsPerOFDMSymbol));
     // Add signal extension for ERP PHY
     return numberOfSymbols * getSymbolInterval();
 }

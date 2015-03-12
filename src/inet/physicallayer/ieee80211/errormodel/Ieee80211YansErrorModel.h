@@ -66,12 +66,15 @@ class INET_API Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
     double GetFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const;
     double GetFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dfree, uint32_t adFree, uint32_t adFreePlusOne) const;
 
+    virtual double getOFDMAndERPOFDMChunkSuccessRate(const APSKModulationBase *subcarrierModulation, const ConvolutionalCode *convolutionalCode, unsigned int bitLength, bps gorssBitrate, Hz bandwidth, double snr) const;
+    virtual double getDSSSAndHrDSSSChunkSuccessRate(bps bitrate, unsigned int bitLength, double snr) const;
+
   public:
      Ieee80211YansErrorModel();
 
      virtual void printToStream(std::ostream& stream) const override { stream << "Ieee80211YansErrorModel"; }
      virtual double GetChunkSuccessRate(const IIeee80211ChunkMode *chunkMode, double snr, uint32_t nbits) const override;
-     virtual double getSuccessRate(const IIeee80211Mode *mode, unsigned int headerBitLength, unsigned int payloadBitLength, double snr) const override {return 0;}
+     virtual double getSuccessRate(const IIeee80211Mode *mode, unsigned int headerBitLength, unsigned int payloadBitLength, double snr) const override;
 };
 
 } // namespace physicallayer

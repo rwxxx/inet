@@ -73,7 +73,6 @@ class INET_API Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
      Ieee80211YansErrorModel();
 
      virtual void printToStream(std::ostream& stream) const override { stream << "Ieee80211YansErrorModel"; }
-     virtual double GetChunkSuccessRate(const IIeee80211ChunkMode *chunkMode, double snr, uint32_t nbits) const override;
      virtual double getSuccessRate(const IIeee80211Mode *mode, unsigned int headerBitLength, unsigned int payloadBitLength, double snr) const override;
 };
 

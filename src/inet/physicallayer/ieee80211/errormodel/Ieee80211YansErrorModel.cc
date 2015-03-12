@@ -119,9 +119,7 @@ double Ieee80211YansErrorModel::CalculatePd(double ber, unsigned int d) const
     return pd;
 }
 
-double Ieee80211YansErrorModel::GetFecBpskBer(double snr, double nbits,
-        Hz signalSpread, bps phyRate,
-        uint32_t dFree, uint32_t adFree) const
+double Ieee80211YansErrorModel::GetFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const
 {
     double ber = GetBpskBer(snr, signalSpread, phyRate);
     if (ber == 0.0) {
@@ -134,11 +132,7 @@ double Ieee80211YansErrorModel::GetFecBpskBer(double snr, double nbits,
     return pms;
 }
 
-double Ieee80211YansErrorModel::GetFecQamBer(double snr, uint32_t nbits,
-        Hz signalSpread,
-        bps phyRate,
-        uint32_t m, uint32_t dFree,
-        uint32_t adFree, uint32_t adFreePlusOne) const
+double Ieee80211YansErrorModel::GetFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dFree, uint32_t adFree, uint32_t adFreePlusOne) const
 {
     double ber = GetQamBer(snr, m, signalSpread, phyRate);
     if (ber == 0.0) {

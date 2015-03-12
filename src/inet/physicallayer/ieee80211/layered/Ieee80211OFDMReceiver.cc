@@ -120,9 +120,7 @@ double Ieee80211OFDMReceiver::getCodeRateFromDecoderModule(const IDecoder *decod
     const Ieee80211OFDMDecoderModule *decoderModule = check_and_cast<const Ieee80211OFDMDecoderModule *>(decoder);
     const Ieee80211OFDMCode *code = decoderModule->getCode();
     const ConvolutionalCode *convolutionalCode = code->getConvolutionalCode();
-    if (convolutionalCode)
-        return 1.0 * convolutionalCode->getCodeRatePuncturingN() / convolutionalCode->getCodeRatePuncturingK();
-    return 1;
+    return convolutionalCode ? 1.0 * convolutionalCode->getCodeRatePuncturingN() / convolutionalCode->getCodeRatePuncturingK() : 1;
 }
 
 const IReceptionBitModel *Ieee80211OFDMReceiver::createCompleteBitModel(const IReceptionBitModel *signalFieldBitModel, const IReceptionBitModel *dataFieldBitModel) const

@@ -121,7 +121,19 @@ void EtherMACFullDuplex::startFrameTransmission()
 
     // send
     EV_INFO << "Transmission of " << frame << " started.\n";
-    send(frame, physOutGate);
+    if (par("sendSerializedPacket")) {
+        using namespace serializer;
+        char * bytes = new char[frame->getByteLength()];
+        Buffer b(bytes, frame->getByteLength());
+        Context c;
+        c.throwOnSerializerNotFound = false;
+        EthernetSerializer().serializePacket(frame, b, c);
+        RawPacket *pk = new RawPacket(frame->getName());
+        pk->setDataFromBuffer(bytes, b.getPos());
+        delete frame;
+        send(pk, physOutGate);
+    } else
+        send(frame, physOutGate);
 
     scheduleAt(transmissionChannel->getTransmissionFinishTime(), endTxMsg);
     transmitState = TRANSMITTING_STATE;

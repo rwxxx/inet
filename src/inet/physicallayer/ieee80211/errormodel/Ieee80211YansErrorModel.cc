@@ -37,7 +37,7 @@ Ieee80211YansErrorModel::Ieee80211YansErrorModel()
 {
 }
 
-double Ieee80211YansErrorModel::GetBpskBer(double snr, Hz signalSpread, bps phyRate) const
+double Ieee80211YansErrorModel::getBpskBer(double snr, Hz signalSpread, bps phyRate) const
 {
     double EbNo = snr * signalSpread.get() / phyRate.get();
     double z = sqrt(EbNo);
@@ -46,7 +46,7 @@ double Ieee80211YansErrorModel::GetBpskBer(double snr, Hz signalSpread, bps phyR
     return ber;
 }
 
-double Ieee80211YansErrorModel::GetQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const
+double Ieee80211YansErrorModel::getQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const
 {
     double EbNo = snr * signalSpread.get() / phyRate.get();
     double z = sqrt((1.5 * log2(m) * EbNo) / (m - 1.0));
@@ -57,7 +57,7 @@ double Ieee80211YansErrorModel::GetQamBer(double snr, unsigned int m, Hz signalS
     return ber;
 }
 
-uint32_t Ieee80211YansErrorModel::Factorial(uint32_t k) const
+uint32_t Ieee80211YansErrorModel::factorial(uint32_t k) const
 {
     uint32_t fact = 1;
     while (k > 0) {
@@ -67,13 +67,13 @@ uint32_t Ieee80211YansErrorModel::Factorial(uint32_t k) const
     return fact;
 }
 
-double Ieee80211YansErrorModel::Binomial(uint32_t k, double p, uint32_t n) const
+double Ieee80211YansErrorModel::binomialCoefficient(uint32_t k, double p, uint32_t n) const
 {
-    double retval = Factorial(n) / (Factorial(k) * Factorial(n - k)) * pow(p, (int)k) * pow(1 - p, (int)(n - k));
+    double retval = factorial(n) / (factorial(k) * factorial(n - k)) * pow(p, (int)k) * pow(1 - p, (int)(n - k));
     return retval;
 }
 
-double Ieee80211YansErrorModel::CalculatePdOdd(double ber, unsigned int d) const
+double Ieee80211YansErrorModel::calculatePdOdd(double ber, unsigned int d) const
 {
     ASSERT((d % 2) == 1);
     unsigned int dstart = (d + 1) / 2;
@@ -81,12 +81,12 @@ double Ieee80211YansErrorModel::CalculatePdOdd(double ber, unsigned int d) const
     double pd = 0;
 
     for (unsigned int i = dstart; i < dend; i++) {
-        pd += Binomial(i, ber, d);
+        pd += binomialCoefficient(i, ber, d);
     }
     return pd;
 }
 
-double Ieee80211YansErrorModel::CalculatePdEven(double ber, unsigned int d) const
+double Ieee80211YansErrorModel::calculatePdEven(double ber, unsigned int d) const
 {
     ASSERT((d % 2) == 0);
     unsigned int dstart = d / 2 + 1;
@@ -94,49 +94,49 @@ double Ieee80211YansErrorModel::CalculatePdEven(double ber, unsigned int d) cons
     double pd = 0;
 
     for (unsigned int i = dstart; i < dend; i++) {
-        pd += Binomial(i, ber, d);
+        pd += binomialCoefficient(i, ber, d);
     }
-    pd += 0.5 * Binomial(d / 2, ber, d);
+    pd += 0.5 * binomialCoefficient(d / 2, ber, d);
 
     return pd;
 }
 
-double Ieee80211YansErrorModel::CalculatePd(double ber, unsigned int d) const
+double Ieee80211YansErrorModel::calculatePd(double ber, unsigned int d) const
 {
     double pd;
     if ((d % 2) == 0) {
-        pd = CalculatePdEven(ber, d);
+        pd = calculatePdEven(ber, d);
     }
     else {
-        pd = CalculatePdOdd(ber, d);
+        pd = calculatePdOdd(ber, d);
     }
     return pd;
 }
 
-double Ieee80211YansErrorModel::GetFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const
+double Ieee80211YansErrorModel::getFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const
 {
-    double ber = GetBpskBer(snr, signalSpread, phyRate);
+    double ber = getBpskBer(snr, signalSpread, phyRate);
     if (ber == 0.0) {
         return 1.0;
     }
-    double pd = CalculatePd(ber, dFree);
+    double pd = calculatePd(ber, dFree);
     double pmu = adFree * pd;
     pmu = std::min(pmu, 1.0);
     double pms = pow(1 - pmu, nbits);
     return pms;
 }
 
-double Ieee80211YansErrorModel::GetFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dFree, uint32_t adFree, uint32_t adFreePlusOne) const
+double Ieee80211YansErrorModel::getFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dFree, uint32_t adFree, uint32_t adFreePlusOne) const
 {
-    double ber = GetQamBer(snr, m, signalSpread, phyRate);
+    double ber = getQamBer(snr, m, signalSpread, phyRate);
     if (ber == 0.0) {
         return 1.0;
     }
     /* first term */
-    double pd = CalculatePd(ber, dFree);
+    double pd = calculatePd(ber, dFree);
     double pmu = adFree * pd;
     /* second term */
-    pd = CalculatePd(ber, dFree + 1);
+    pd = calculatePd(ber, dFree + 1);
     pmu += adFreePlusOne * pd;
     pmu = std::min(pmu, 1.0);
     double pms = pow(1 - pmu, (int)nbits);
@@ -147,27 +147,27 @@ double Ieee80211YansErrorModel::getOFDMAndERPOFDMChunkSuccessRate(const APSKModu
 {
     if (subcarrierModulation == &BPSKModulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 1 && convolutionalCode->getCodeRatePuncturingN() == 2)
-            return GetFecBpskBer(snr, bitLength, bandwidth, grossBitrate, 10, 11);
+            return getFecBpskBer(snr, bitLength, bandwidth, grossBitrate, 10, 11);
         else
-            return GetFecBpskBer(snr, bitLength, bandwidth, grossBitrate, 5, 8 );
+            return getFecBpskBer(snr, bitLength, bandwidth, grossBitrate, 5, 8 );
     }
     else if (subcarrierModulation == &QPSKModulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 1 && convolutionalCode->getCodeRatePuncturingN() == 2)
-            return GetFecQamBer(snr, bitLength, bandwidth, grossBitrate, 4, 10, 11, 0 );
+            return getFecQamBer(snr, bitLength, bandwidth, grossBitrate, 4, 10, 11, 0 );
         else
-            return GetFecQamBer(snr, bitLength, bandwidth, grossBitrate, 4, 5, 8, 31);
+            return getFecQamBer(snr, bitLength, bandwidth, grossBitrate, 4, 5, 8, 31);
     }
     else if (subcarrierModulation == &QAM16Modulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 1 && convolutionalCode->getCodeRatePuncturingN() == 2)
-            return GetFecQamBer(snr, bitLength, bandwidth, grossBitrate, 16, 10, 11, 0);
+            return getFecQamBer(snr, bitLength, bandwidth, grossBitrate, 16, 10, 11, 0);
         else
-            return GetFecQamBer(snr, bitLength, bandwidth, grossBitrate, 16, 5, 8, 31);
+            return getFecQamBer(snr, bitLength, bandwidth, grossBitrate, 16, 5, 8, 31);
     }
     else if (subcarrierModulation == &QAM64Modulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 2 && convolutionalCode->getCodeRatePuncturingN() == 3)
-            return GetFecQamBer(snr, bitLength, bandwidth, grossBitrate, 64, 6, 1, 16);
+            return getFecQamBer(snr, bitLength, bandwidth, grossBitrate, 64, 6, 1, 16);
         else
-            return GetFecQamBer(snr, bitLength, bandwidth, grossBitrate, 64, 5, 8, 31);
+            return getFecQamBer(snr, bitLength, bandwidth, grossBitrate, 64, 5, 8, 31);
     }
     else
         throw cRuntimeError("Unknown modulation");

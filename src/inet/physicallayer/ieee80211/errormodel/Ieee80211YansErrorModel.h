@@ -55,15 +55,15 @@ namespace physicallayer {
 class INET_API Ieee80211YansErrorModel : public Ieee80211ErrorModelBase
 {
   protected:
-    double GetBpskBer(double snr, Hz signalSpread, bps phyRate) const;
-    double GetQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const;
-    uint32_t Factorial(uint32_t k) const;
-    double Binomial(uint32_t k, double p, uint32_t n) const;
-    double CalculatePdOdd(double ber, unsigned int d) const;
-    double CalculatePdEven(double ber, unsigned int d) const;
-    double CalculatePd(double ber, unsigned int d) const;
-    double GetFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const;
-    double GetFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dfree, uint32_t adFree, uint32_t adFreePlusOne) const;
+    double getBpskBer(double snr, Hz signalSpread, bps phyRate) const;
+    double getQamBer(double snr, unsigned int m, Hz signalSpread, bps phyRate) const;
+    uint32_t factorial(uint32_t k) const;
+    double binomialCoefficient(uint32_t k, double p, uint32_t n) const;
+    double calculatePdOdd(double ber, unsigned int d) const;
+    double calculatePdEven(double ber, unsigned int d) const;
+    double calculatePd(double ber, unsigned int d) const;
+    double getFecBpskBer(double snr, double nbits, Hz signalSpread, bps phyRate, uint32_t dFree, uint32_t adFree) const;
+    double getFecQamBer(double snr, uint32_t nbits, Hz signalSpread, bps phyRate, uint32_t m, uint32_t dfree, uint32_t adFree, uint32_t adFreePlusOne) const;
 
     virtual double getOFDMAndERPOFDMChunkSuccessRate(const APSKModulationBase *subcarrierModulation, const ConvolutionalCode *convolutionalCode, unsigned int bitLength, bps gorssBitrate, Hz bandwidth, double snr) const;
     virtual double getDSSSAndHrDSSSChunkSuccessRate(bps bitrate, unsigned int bitLength, double snr) const;

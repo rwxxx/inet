@@ -97,14 +97,14 @@ bps Ieee80211HTDataMode::computeNetBitrate() const
     return computeGrossBitrate() * code->getForwardErrorCorrection()->getCodeRate();
 }
 
-bps Ieee80211HTModeBase::getNetBitrate()
+bps Ieee80211HTModeBase::getNetBitrate() const
 {
     if (isNaN(netBitrate.get()))
         netBitrate = computeNetBitrate();
     return netBitrate;
 }
 
-bps Ieee80211HTModeBase::getGrossBitrate()
+bps Ieee80211HTModeBase::getGrossBitrate() const
 {
     if (isNaN(grossBitrate.get()))
         grossBitrate = computeGrossBitrate();

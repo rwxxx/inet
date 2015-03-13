@@ -51,8 +51,8 @@ class INET_API Ieee80211HTModeBase
         const unsigned int modulationAndCodingScheme; // MCS
         const unsigned int numberOfSpatialStreams; // N_SS
 
-        bps netBitrate; // cached
-        bps grossBitrate; // cached
+        mutable bps netBitrate; // cached
+        mutable bps grossBitrate; // cached
 
     protected:
         virtual bps computeGrossBitrate() const = 0;
@@ -69,8 +69,8 @@ class INET_API Ieee80211HTModeBase
         unsigned int getModulationAndCodingScheme() const { return modulationAndCodingScheme; }
 
         Hz getBandwidth() const { return bandwidth; }
-        bps getNetBitrate();
-        bps getGrossBitrate();
+        bps getNetBitrate() const;
+        bps getGrossBitrate() const;
 
 };
 

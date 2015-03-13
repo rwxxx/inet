@@ -76,15 +76,17 @@ class INET_API Ieee80211HTModeBase
 class INET_API Ieee80211HTSignalMode : public IIeee80211HeaderMode, public Ieee80211HTModeBase, public Ieee80211HTTimingRelatedParametersBase
 {
     protected:
-        const Ieee80211HTCode *code;
         const Ieee80211OFDMModulation *modulation;
+        const Ieee80211HTCode *code;
 
     protected:
         bps computeGrossBitrate() const override;
         bps computeNetBitrate() const override;
 
     public:
-        Ieee80211HTSignalMode(unsigned int modulationAndCodingScheme, const Hz bandwidth, GuardIntervalType guardIntervalType);
+        Ieee80211HTSignalMode(unsigned int modulationAndCodingScheme, const Ieee80211OFDMModulation *modulation, const Ieee80211HTCode *code, const Hz bandwidth, GuardIntervalType guardIntervalType);
+        Ieee80211HTSignalMode(unsigned int modulationAndCodingScheme, const Ieee80211OFDMModulation *modulation, const Ieee80211ConvolutionalCode *convolutionalCode, const Hz bandwidth, GuardIntervalType guardIntervalType);
+        virtual ~Ieee80211HTSignalMode();
 
         /* Table 20-11—HT-SIG fields, 1699p */
 
@@ -138,6 +140,7 @@ class INET_API Ieee80211HTPreambleMode : public IIeee80211PreambleMode, public I
 
     public:
         Ieee80211HTPreambleMode(const Ieee80211HTSignalMode* highThroughputSignalMode, const Ieee80211OFDMSignalMode *legacySignalMode, HighTroughputPreambleFormat preambleFormat, unsigned int numberOfSpatialStream);
+        virtual ~Ieee80211HTPreambleMode() {}
 
         HighTroughputPreambleFormat getPreambleFormat() const { return preambleFormat; }
         const Ieee80211HTSignalMode *getSignalMode() const { return highThroughputSignalMode; }
@@ -162,11 +165,11 @@ class INET_API Ieee80211HTPreambleMode : public IIeee80211PreambleMode, public I
 class INET_API Ieee80211HTDataMode : public IIeee80211DataMode, public Ieee80211HTModeBase, public Ieee80211HTTimingRelatedParametersBase
 {
     protected:
-        const Ieee80211HTCode *code;
         const Ieee80211OFDMModulation *stream1Modulation;
         const Ieee80211OFDMModulation *stream2Modulation;
         const Ieee80211OFDMModulation *stream3Modulation;
         const Ieee80211OFDMModulation *stream4Modulation;
+        const Ieee80211HTCode *code;
 
         unsigned int numberOfBCCEncoders;
 
@@ -177,6 +180,8 @@ class INET_API Ieee80211HTDataMode : public IIeee80211DataMode, public Ieee80211
 
     public:
         Ieee80211HTDataMode(unsigned int modulationAndCodingScheme, unsigned int numberOfBCCEncoders, const Ieee80211HTCode *code, const Ieee80211OFDMModulation *stream1Modulation, const Ieee80211OFDMModulation *stream2Modulation, const Ieee80211OFDMModulation *stream3Modulation, const Ieee80211OFDMModulation *stream4Modulation, const Hz bandwidth, GuardIntervalType guardIntervalType);
+        Ieee80211HTDataMode(unsigned int modulationAndCodingScheme, unsigned int numberOfBCCEncoders, const Ieee80211OFDMModulation *stream1Modulation, const Ieee80211OFDMModulation *stream2Modulation, const Ieee80211OFDMModulation *stream3Modulation, const Ieee80211OFDMModulation *stream4Modulation, const Ieee80211ConvolutionalCode *convolutionalCode, const Hz bandwidth, GuardIntervalType guardIntervalType);
+        virtual ~Ieee80211HTDataMode();
 
         const Ieee80211HTCode* getCode() const { return code; }
         const Ieee80211OFDMModulation* getStream1Modulation() const { return stream1Modulation; }
@@ -202,6 +207,7 @@ class INET_API Ieee80211HTMode : public IIeee80211Mode
 
     public:
         Ieee80211HTMode(const Ieee80211HTPreambleMode *preambleMode, const Ieee80211HTDataMode *dataMode, const Hz carrierFrequency);
+        virtual ~Ieee80211HTMode() {}
 
         const Ieee80211HTDataMode* getDataMode() const override { return dataMode; }
         const Ieee80211HTPreambleMode* getPreambleMode() const override { return preambleMode; }

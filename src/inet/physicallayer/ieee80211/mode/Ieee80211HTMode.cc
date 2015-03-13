@@ -16,6 +16,7 @@
 //
 
 #include "inet/physicallayer/ieee80211/mode/Ieee80211HTMode.h"
+#include "inet/physicallayer/ieee80211/Ieee80211HTCode.h"
 
 namespace inet {
 namespace physicallayer {
@@ -45,18 +46,39 @@ Ieee80211HTPreambleMode::Ieee80211HTPreambleMode(const Ieee80211HTSignalMode* hi
 {
 }
 
-Ieee80211HTSignalMode::Ieee80211HTSignalMode(unsigned int modulationAndCodingScheme, const Hz bandwidth, GuardIntervalType guardIntervalType) :
-        Ieee80211HTModeBase(modulationAndCodingScheme, 1, bandwidth, guardIntervalType) // TODO: Should HT signal mode support spatial extensions in non-compliant mode?
+Ieee80211HTSignalMode::Ieee80211HTSignalMode(unsigned int modulationAndCodingScheme, const Ieee80211OFDMModulation *modulation, const Ieee80211HTCode *code, const Hz bandwidth, GuardIntervalType guardIntervalType) :
+        Ieee80211HTModeBase(modulationAndCodingScheme, 1, bandwidth, guardIntervalType),
+        modulation(modulation),
+        code(code)
 {
 }
 
+Ieee80211HTSignalMode::Ieee80211HTSignalMode(unsigned int modulationAndCodingScheme, const Ieee80211OFDMModulation* modulation, const Ieee80211ConvolutionalCode *convolutionalCode, const Hz bandwidth, GuardIntervalType guardIntervalType) :
+        Ieee80211HTModeBase(modulationAndCodingScheme, 1, bandwidth, guardIntervalType),
+        modulation(modulation),
+        code(Ieee80211HTCompliantCodes::getCompliantCode(convolutionalCode, modulation, nullptr, nullptr, nullptr, bandwidth, false))
+{
+}
+
+
 Ieee80211HTDataMode::Ieee80211HTDataMode(unsigned int modulationAndCodingScheme, unsigned int numberOfBCCEncoders, const Ieee80211HTCode* code, const Ieee80211OFDMModulation* stream1Modulation, const Ieee80211OFDMModulation* stream2Modulation, const Ieee80211OFDMModulation* stream3Modulation, const Ieee80211OFDMModulation* stream4Modulation, const Hz bandwidth, GuardIntervalType guardIntervalType) :
         Ieee80211HTModeBase(modulationAndCodingScheme, computeNumberOfSpatialStreams(stream1Modulation,stream2Modulation, stream3Modulation, stream4Modulation), bandwidth, guardIntervalType),
-        code(code),
         stream1Modulation(stream1Modulation),
         stream2Modulation(stream2Modulation),
         stream3Modulation(stream3Modulation),
         stream4Modulation(stream4Modulation),
+        code(code),
+        numberOfBCCEncoders(numberOfBCCEncoders)
+{
+}
+
+Ieee80211HTDataMode::Ieee80211HTDataMode(unsigned int modulationAndCodingScheme, unsigned int numberOfBCCEncoders, const Ieee80211OFDMModulation* stream1Modulation, const Ieee80211OFDMModulation* stream2Modulation, const Ieee80211OFDMModulation* stream3Modulation, const Ieee80211OFDMModulation* stream4Modulation, const Ieee80211ConvolutionalCode *convolutionalCode, const Hz bandwidth, GuardIntervalType guardIntervalType) :
+        Ieee80211HTModeBase(modulationAndCodingScheme, computeNumberOfSpatialStreams(stream1Modulation,stream2Modulation, stream3Modulation, stream4Modulation), bandwidth, guardIntervalType),
+        stream1Modulation(stream1Modulation),
+        stream2Modulation(stream2Modulation),
+        stream3Modulation(stream3Modulation),
+        stream4Modulation(stream4Modulation),
+        code(Ieee80211HTCompliantCodes::getCompliantCode(convolutionalCode, stream1Modulation, stream2Modulation, stream3Modulation, stream4Modulation, bandwidth)),
         numberOfBCCEncoders(numberOfBCCEncoders)
 {
 }
@@ -243,6 +265,17 @@ const simtime_t Ieee80211HTMode::getShortSlotTime() const
         return 9E-6;
     else
         throw cRuntimeError("Short slot time is not defined for %f Hz carrier frequency", carrierFrequency.get());
+}
+
+
+Ieee80211HTDataMode::~Ieee80211HTDataMode()
+{
+    delete code;
+}
+
+Ieee80211HTSignalMode::~Ieee80211HTSignalMode()
+{
+    delete code;
 }
 
 } /* namespace physicallayer */

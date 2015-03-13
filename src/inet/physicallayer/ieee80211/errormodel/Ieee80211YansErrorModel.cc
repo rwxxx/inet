@@ -33,10 +33,6 @@ namespace physicallayer {
 
 Define_Module(Ieee80211YansErrorModel);
 
-Ieee80211YansErrorModel::Ieee80211YansErrorModel()
-{
-}
-
 double Ieee80211YansErrorModel::getBpskBer(double snr, Hz signalSpread, bps phyRate) const
 {
     double EbNo = snr * signalSpread.get() / phyRate.get();

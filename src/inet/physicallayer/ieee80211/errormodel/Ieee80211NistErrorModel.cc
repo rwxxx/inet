@@ -37,7 +37,7 @@ Ieee80211NistErrorModel::~Ieee80211NistErrorModel()
 {
 }
 
-double Ieee80211NistErrorModel::GetBpskBer(double snr) const
+double Ieee80211NistErrorModel::getBpskBer(double snr) const
 {
     double z = sqrt(snr);
     double ber = 0.5 * erfc(z);
@@ -45,7 +45,7 @@ double Ieee80211NistErrorModel::GetBpskBer(double snr) const
     return ber;
 }
 
-double Ieee80211NistErrorModel::GetQpskBer(double snr) const
+double Ieee80211NistErrorModel::getQpskBer(double snr) const
 {
     double z = sqrt(snr / 2.0);
     double ber = 0.5 * erfc(z);
@@ -53,7 +53,7 @@ double Ieee80211NistErrorModel::GetQpskBer(double snr) const
     return ber;
 }
 
-double Ieee80211NistErrorModel::Get16QamBer(double snr) const
+double Ieee80211NistErrorModel::get16QamBer(double snr) const
 {
     double z = sqrt(snr / (5.0 * 2.0));
     double ber = 0.75 * 0.5 * erfc(z);
@@ -61,7 +61,7 @@ double Ieee80211NistErrorModel::Get16QamBer(double snr) const
     return ber;
 }
 
-double Ieee80211NistErrorModel::Get64QamBer(double snr) const
+double Ieee80211NistErrorModel::get64QamBer(double snr) const
 {
     double z = sqrt(snr / (21.0 * 2.0));
     double ber = 7.0 / 12.0 * 0.5 * erfc(z);
@@ -69,31 +69,31 @@ double Ieee80211NistErrorModel::Get64QamBer(double snr) const
     return ber;
 }
 
-double Ieee80211NistErrorModel::GetFecBpskBer(double snr, double nbits, uint32_t bValue) const
+double Ieee80211NistErrorModel::getFecBpskBer(double snr, double nbits, uint32_t bValue) const
 {
-    double ber = GetBpskBer(snr);
+    double ber = getBpskBer(snr);
     if (ber == 0.0) {
         return 1.0;
     }
-    double pe = CalculatePe(ber, bValue);
+    double pe = calculatePe(ber, bValue);
     pe = std::min(pe, 1.0);
     double pms = pow(1 - pe, nbits);
     return pms;
 }
 
-double Ieee80211NistErrorModel::GetFecQpskBer(double snr, double nbits, uint32_t bValue) const
+double Ieee80211NistErrorModel::getFecQpskBer(double snr, double nbits, uint32_t bValue) const
 {
-    double ber = GetQpskBer(snr);
+    double ber = getQpskBer(snr);
     if (ber == 0.0) {
         return 1.0;
     }
-    double pe = CalculatePe(ber, bValue);
+    double pe = calculatePe(ber, bValue);
     pe = std::min(pe, 1.0);
     double pms = pow(1 - pe, nbits);
     return pms;
 }
 
-double Ieee80211NistErrorModel::CalculatePe(double p, uint32_t bValue) const
+double Ieee80211NistErrorModel::calculatePe(double p, uint32_t bValue) const
 {
     double D = sqrt(4.0 * p * (1.0 - p));
     double pe = 1.0;
@@ -124,25 +124,25 @@ double Ieee80211NistErrorModel::CalculatePe(double p, uint32_t bValue) const
     return pe;
 }
 
-double Ieee80211NistErrorModel::GetFec16QamBer(double snr, uint32_t nbits, uint32_t bValue) const
+double Ieee80211NistErrorModel::getFec16QamBer(double snr, uint32_t nbits, uint32_t bValue) const
 {
-    double ber = Get16QamBer(snr);
+    double ber = get16QamBer(snr);
     if (ber == 0.0) {
         return 1.0;
     }
-    double pe = CalculatePe(ber, bValue);
+    double pe = calculatePe(ber, bValue);
     pe = std::min(pe, 1.0);
     double pms = pow(1 - pe, (double)nbits);
     return pms;
 }
 
-double Ieee80211NistErrorModel::GetFec64QamBer(double snr, uint32_t nbits, uint32_t bValue) const
+double Ieee80211NistErrorModel::getFec64QamBer(double snr, uint32_t nbits, uint32_t bValue) const
 {
-    double ber = Get64QamBer(snr);
+    double ber = get64QamBer(snr);
     if (ber == 0.0) {
         return 1.0;
     }
-    double pe = CalculatePe(ber, bValue);
+    double pe = calculatePe(ber, bValue);
     pe = std::min(pe, 1.0);
     double pms = pow(1 - pe, (double)nbits);
     return pms;
@@ -152,23 +152,23 @@ double Ieee80211NistErrorModel::getOFDMAndERPOFDMChunkSuccessRate(const APSKModu
 {
     if (subcarrierModulation == &BPSKModulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 1 && convolutionalCode->getCodeRatePuncturingN() == 2)
-            return GetFecBpskBer(snr, bitLength, 1);
-        return GetFecBpskBer(snr, bitLength, 3);
+            return getFecBpskBer(snr, bitLength, 1);
+        return getFecBpskBer(snr, bitLength, 3);
     }
     else if (subcarrierModulation == &QPSKModulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 1 && convolutionalCode->getCodeRatePuncturingN() == 2)
-            return GetFecQpskBer(snr, bitLength, 1);
-        return GetFecQpskBer(snr, bitLength, 3);
+            return getFecQpskBer(snr, bitLength, 1);
+        return getFecQpskBer(snr, bitLength, 3);
     }
     else if (subcarrierModulation == &QAM16Modulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 1 && convolutionalCode->getCodeRatePuncturingN() == 2)
-            return GetFec16QamBer(snr, bitLength, 1);
-        return GetFec16QamBer(snr, bitLength, 3);
+            return getFec16QamBer(snr, bitLength, 1);
+        return getFec16QamBer(snr, bitLength, 3);
     }
     else if (subcarrierModulation == &QAM64Modulation::singleton) {
         if (convolutionalCode->getCodeRatePuncturingK() == 2 && convolutionalCode->getCodeRatePuncturingN() == 3)
-            return GetFec64QamBer(snr, bitLength, 2);
-        return GetFec64QamBer(snr, bitLength, 3);
+            return getFec64QamBer(snr, bitLength, 2);
+        return getFec64QamBer(snr, bitLength, 3);
     }
     else
         throw cRuntimeError("Unknown modulation");

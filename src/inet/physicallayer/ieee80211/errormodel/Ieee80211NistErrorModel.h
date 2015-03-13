@@ -39,15 +39,15 @@ namespace physicallayer {
 class INET_API Ieee80211NistErrorModel : public Ieee80211ErrorModelBase
 {
   protected:
-    double CalculatePe(double p, uint32_t bValue) const;
-    double GetBpskBer(double snr) const;
-    double GetQpskBer(double snr) const;
-    double Get16QamBer(double snr) const;
-    double Get64QamBer(double snr) const;
-    double GetFecBpskBer(double snr, double nbits, uint32_t bValue) const;
-    double GetFecQpskBer(double snr, double nbits, uint32_t bValue) const;
-    double GetFec16QamBer(double snr, uint32_t nbits, uint32_t bValue) const;
-    double GetFec64QamBer(double snr, uint32_t nbits, uint32_t bValue) const;
+    double calculatePe(double p, uint32_t bValue) const;
+    double getBpskBer(double snr) const;
+    double getQpskBer(double snr) const;
+    double get16QamBer(double snr) const;
+    double get64QamBer(double snr) const;
+    double getFecBpskBer(double snr, double nbits, uint32_t bValue) const;
+    double getFecQpskBer(double snr, double nbits, uint32_t bValue) const;
+    double getFec16QamBer(double snr, uint32_t nbits, uint32_t bValue) const;
+    double getFec64QamBer(double snr, uint32_t nbits, uint32_t bValue) const;
 
     virtual double getOFDMAndERPOFDMChunkSuccessRate(const APSKModulationBase *subcarrierModulation, const ConvolutionalCode *convolutionalCode, unsigned int bitLength, double snr) const;
     virtual double getDSSSAndHrDSSSChunkSuccessRate(bps bitrate, unsigned int bitLength, double snr) const;

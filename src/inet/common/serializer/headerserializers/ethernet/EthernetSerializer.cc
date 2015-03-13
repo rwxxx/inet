@@ -87,7 +87,7 @@ void EthernetSerializer::serialize(const cPacket *pkt, Buffer &b, Context& c)
     b.writeUint32(fcs);
 }
 
-cPacket* EthernetSerializer::deserialize(Buffer &b, Context& c)
+cPacket* EthernetSerializer::deserialize(Buffer &b, Context& c, ProtocolGroup group, int id)
 {
     ASSERT(b.getPos() == 0);
 

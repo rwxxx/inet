@@ -74,7 +74,7 @@ void ARPSerializer::serialize(const cPacket *_pkt, Buffer &b, Context& context)
         throw cRuntimeError("ARPSerializer: encapsulated packet not supported!");
 }
 
-cPacket* ARPSerializer::deserialize(Buffer &b, Context& context)
+cPacket* ARPSerializer::deserialize(Buffer &b, Context& context, ProtocolGroup group, int id)
 {
     ARPPacket *pkt = new ARPPacket("parsed ARP");
 

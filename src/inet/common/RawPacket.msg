@@ -30,6 +30,8 @@ class noncobject ByteArray;
 packet RawPacket
 {
     @customize(true);
+    int groupId;        // protocol group id, e.g. ethertype or IP protocol id
+    int protocolId;     // protocol id 
     ByteArray byteArray;
 }
 

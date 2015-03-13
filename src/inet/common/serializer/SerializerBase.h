@@ -128,7 +128,7 @@ class INET_API SerializerBase : public cOwnedObject
     /**
      * Puts a packet sniffed from the wire into an EtherFrame.
      */
-    virtual cPacket *deserialize(Buffer &b, Context& context) = 0;
+    virtual cPacket *deserialize(Buffer &b, Context& context, ProtocolGroup group, int id) = 0;
 
   public:
     SerializerBase(const char *name = nullptr) : cOwnedObject(name) {}
@@ -139,21 +139,21 @@ class INET_API SerializerBase : public cOwnedObject
 
     static SerializerBase & lookupDeserializer(Context& context, ProtocolGroup group, int id);
     static cPacket *lookupAndDeserialize(Buffer &b, Context& context, ProtocolGroup group, int id, unsigned int trailerLength);
-    cPacket *deserializePacket(Buffer &b, Context& context);
+    cPacket *deserializePacket(Buffer &b, Context& context, ProtocolGroup group, int id);
 };
 
 class INET_API DefaultSerializer : public SerializerBase
 {
   public:
     virtual void serialize(const cPacket *pkt, Buffer &b, Context& context);
-    virtual cPacket *deserialize(Buffer &b, Context& context);
+    virtual cPacket *deserialize(Buffer &b, Context& context, ProtocolGroup group, int id);
 };
 
 class INET_API ByteArraySerializer : public SerializerBase
 {
   public:
     virtual void serialize(const cPacket *pkt, Buffer &b, Context& context);
-    virtual cPacket *deserialize(Buffer &b, Context& context);
+    virtual cPacket *deserialize(Buffer &b, Context& context, ProtocolGroup group, int id);
 };
 
 class INET_API SerializerRegistrationList : public cNamedObject, noncopyable

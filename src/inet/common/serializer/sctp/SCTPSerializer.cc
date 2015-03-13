@@ -64,7 +64,7 @@ void SCTPSerializer::serialize(const cPacket *pkt, Buffer &b, Context& context)
     b.accessNBytes(len);
 }
 
-cPacket* SCTPSerializer::deserialize(Buffer &b, Context& context)
+cPacket* SCTPSerializer::deserialize(Buffer &b, Context& context, ProtocolGroup group, int id)
 {
     SCTPMessage *dest = new SCTPMessage("parsed-sctp");
     parse(static_cast<uint8 *>(b.accessNBytes(0)), b.getRemainder(), dest);

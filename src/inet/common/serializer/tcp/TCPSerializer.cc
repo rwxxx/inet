@@ -148,10 +148,10 @@ TCPSegment *TCPSerializer::deserialize(const unsigned char *buf, unsigned int bu
 {
     Buffer b(const_cast<unsigned char *>(buf), bufsize);
     Context c;
-    return check_and_cast_nullable<TCPSegment *>(deserialize(b, c));
+    return check_and_cast_nullable<TCPSegment *>(deserialize(b, c, IP_PROT, IP_PROT_TCP));
 }
 
-cPacket* TCPSerializer::deserialize(Buffer &b, Context& c)
+cPacket* TCPSerializer::deserialize(Buffer &b, Context& c, ProtocolGroup group, int id)
 {
     struct tcphdr const *const tcp = static_cast<struct tcphdr const *>(b.accessNBytes(TCP_HEADER_OCTETS));
     if (!tcp) {

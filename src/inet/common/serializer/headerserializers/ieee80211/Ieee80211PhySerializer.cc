@@ -85,7 +85,7 @@ Ieee80211PLCPFrame* Ieee80211PhySerializer::deserialize(BitVector* serializedPac
     Ieee80211Serializer serializer;
     Buffer subBuffer(buf + OFDM_PLCP_HEADER_LENGTH, hdr->length);
     Context c;
-    cPacket *payload = serializer.deserializePacket(subBuffer, c);
+    cPacket *payload = SerializerBase::lookupAndDeserialize(subBuffer, c, LINKTYPE, LINKTYPE_IEEE802_11, 0);
     plcpFrame->setBitLength(OFDM_PLCP_HEADER_LENGTH);
     plcpFrame->encapsulate(payload);
 //    ASSERT(plcpFrame->getBitLength() == OFDM_PLCP_HEADER_LENGTH + 8 * hdr->length);

@@ -29,10 +29,11 @@
 
 #include "inet/linklayer/ext/ExtInterface.h"
 
+#include "inet/common/INETUtils.h"
+#include "inet/common/serializer/ipv4/IPv4Serializer.h"
+#include "inet/linklayer/common/Ieee802Ctrl_m.h"
 #include "inet/networklayer/common/InterfaceEntry.h"
 #include "inet/networklayer/common/InterfaceTable.h"
-#include "inet/common/serializer/ipv4/IPv4Serializer.h"
-#include "inet/common/INETUtils.h"
 #include "inet/networklayer/common/IPProtocolId_m.h"
 #include "inet/networklayer/ipv4/IPv4Datagram.h"
 
@@ -111,7 +112,7 @@ void ExtInterface::handleMessage(cMessage *msg)
 
         Buffer b(const_cast<unsigned char *>(buffer), packetLength);
         Context c;
-        IPv4Datagram *ipPacket = check_and_cast<IPv4Datagram *>(IPv4Serializer().deserializePacket(b, c));
+        IPv4Datagram *ipPacket = check_and_cast<IPv4Datagram *>(IPv4Serializer().deserializePacket(b, c, ETHERTYPE, ETHERTYPE_IPv4));
         EV << "Delivering an IPv4 packet from "
            << ipPacket->getSrcAddress()
            << " to "

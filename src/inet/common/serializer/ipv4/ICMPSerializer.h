@@ -32,7 +32,7 @@ class ICMPSerializer : public SerializerBase
 {
   protected:
     virtual void serialize(const cPacket *pkt, Buffer &b, Context& context) override;
-    virtual cPacket *deserialize(Buffer &b, Context& context) override;
+    virtual cPacket *deserialize(Buffer &b, Context& context, ProtocolGroup group, int id) override;
 
   public:
     ICMPSerializer(const char *name = nullptr) : SerializerBase(name) {}

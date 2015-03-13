@@ -214,13 +214,13 @@ void SerializerBase::serializePacket(const cPacket *pkt, Buffer &b, Context& con
         throw cRuntimeError("%s serializer error: packet %s (%s) length is %d but serialized length is %d", getClassName(), pkt->getName(), pkt->getClassName(), pkt->getByteLength(), b.getPos() - startPos);
 }
 
-cPacket *SerializerBase::deserializePacket(Buffer &b, Context& context)
+cPacket *SerializerBase::deserializePacket(Buffer &b, Context& context, ProtocolGroup group, int id)
 {
     unsigned int startPos = b.getPos();
-    cPacket *pkt = deserialize(b, context);
+    cPacket *pkt = deserialize(b, context, group, id);
     if (pkt == nullptr) {
         b.seek(startPos);
-        pkt = serializers.byteArraySerializer.deserialize(b, context);
+        pkt = serializers.byteArraySerializer.deserialize(b, context, group, id);
     }
     if (!pkt->hasBitError() && !b.hasError() && (b.getPos() - startPos != pkt->getByteLength())) {
         const char *encclass = pkt->getEncapsulatedPacket() ? pkt->getEncapsulatedPacket()->getClassName() : "<nullptr>";
@@ -272,7 +272,12 @@ cPacket *SerializerBase::lookupAndDeserialize(Buffer &b, Context& context, Proto
     cPacket *encapPacket = nullptr;
     SerializerBase& serializer = lookupDeserializer(context, group, id);
     Buffer subBuffer(b, trailerLength);
-    encapPacket = serializer.deserializePacket(subBuffer, context);
+    encapPacket = serializer.deserializePacket(subBuffer, context, group, id);
+    if (dynamic_cast<RawPacket *>(encapPacket)) {
+        RawPacket *rp = static_cast<RawPacket *>(encapPacket);
+        rp->setGroupId(group);
+        rp->setProtocolId(id);
+    }
     b.accessNBytes(subBuffer.getPos());
     return encapPacket;
 }
@@ -285,7 +290,7 @@ void DefaultSerializer::serialize(const cPacket *pkt, Buffer &b, Context& contex
     context.errorOccured = true;
 }
 
-cPacket *DefaultSerializer::deserialize(Buffer &b, Context& context)
+cPacket *DefaultSerializer::deserialize(Buffer &b, Context& context, ProtocolGroup group, int id)
 {
     unsigned int byteLength = b.getRemainder();
     if (byteLength) {
@@ -314,7 +319,7 @@ void ByteArraySerializer::serialize(const cPacket *pkt, Buffer &b, Context& cont
         throw cRuntimeError("Serializer: encapsulated packet in ByteArrayPacket is not allowed");
 }
 
-cPacket *ByteArraySerializer::deserialize(Buffer &b, Context& context)
+cPacket *ByteArraySerializer::deserialize(Buffer &b, Context& context, ProtocolGroup group, int id)
 {
     RawPacket *bam = nullptr;
     unsigned int bytes = b.getRemainder();
@@ -322,6 +327,8 @@ cPacket *ByteArraySerializer::deserialize(Buffer &b, Context& context)
         bam = new RawPacket("parsed-bytes");
         bam->setDataFromBuffer(b.accessNBytes(bytes), bytes);
         bam->setByteLength(bytes);
+        bam->setGroupId(group);
+        bam->setProtocolId(id);
     }
     return bam;
 }

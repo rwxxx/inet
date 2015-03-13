@@ -18,6 +18,7 @@
 
 #include "inet/networklayer/arp/ipv4/ARPPacket_m.h"
 #include "inet/common/serializer/SerializerBase.h"
+#include "inet/linklayer/common/Ieee802Ctrl_m.h"
 #include "inet/linklayer/common/MACAddress.h"
 #include "inet/networklayer/contract/ipv4/IPv4Address.h"
 
@@ -40,7 +41,7 @@ class ARPSerializer : public SerializerBase
     /**
      * Puts a packet sniffed from the wire into an ARPPacket.
      */
-    virtual cPacket *deserialize(Buffer &b, Context& context) override;
+    virtual cPacket *deserialize(Buffer &b, Context& context, ProtocolGroup group, int id) override;
 
     MACAddress readMACAddress(Buffer& b, unsigned int size);
     IPv4Address readIPv4Address(Buffer& b, unsigned int size);
@@ -60,7 +61,7 @@ class ARPSerializer : public SerializerBase
          * Puts a packet sniffed from the wire into an ARPPacket.
          */
         ARPPacket *parse(const unsigned char *buf, unsigned int bufsize)
-        { Buffer b(const_cast<unsigned char *>(buf), bufsize); Context c; return check_and_cast<ARPPacket *>(deserialize(b, c)); }
+        { Buffer b(const_cast<unsigned char *>(buf), bufsize); Context c; return check_and_cast<ARPPacket *>(deserialize(b, c, ETHERTYPE, ETHERTYPE_ARP)); }
 };
 
 } // namespace serializer

@@ -111,7 +111,7 @@ void IPv4Serializer::serialize(const cPacket *pkt, Buffer &b, Context& c)
     ip->ip_sum = htons(TCPIPchecksum::checksum(ip, IP_HEADER_BYTES));
 }
 
-cPacket* IPv4Serializer::deserialize(Buffer &b, Context& c)
+cPacket* IPv4Serializer::deserialize(Buffer &b, Context& c, ProtocolGroup group, int id)
 {
     ASSERT(b.getPos() == 0);
 
@@ -156,7 +156,7 @@ cPacket* IPv4Serializer::deserialize(Buffer &b, Context& c)
 
     cPacket *encapPacket = nullptr;
     if (dest->getMoreFragments() || dest->getFragmentOffset() != 0) {  // IP fragment
-        encapPacket = serializers.byteArraySerializer.deserialize(b, c);
+        encapPacket = serializers.byteArraySerializer.deserialize(b, c, IP_PROT, dest->getTransportProtocol());
     }
     else
         encapPacket = SerializerBase::lookupAndDeserialize(b, c, IP_PROT, dest->getTransportProtocol(), 0);

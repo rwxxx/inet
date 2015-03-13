@@ -84,10 +84,9 @@ APSKPhyFrame *APSKSerializer::deserialize(const BitVector *bits) const
                 phyFrame->setBitError(true);
             }
             else {
-                Ieee80211Serializer deserializer;
                 Buffer b(buffer, macFrameLength);
                 Context c;
-                macFrame = deserializer.deserializePacket(b, c);
+                macFrame = SerializerBase::lookupAndDeserialize(b, c, LINKTYPE, LINKTYPE_IEEE802_11, 0);
             }
             delete[] buffer;
         }

@@ -16,6 +16,7 @@
 //
 
 #include "inet/physicallayer/ieee80211/Ieee80211HTCode.h"
+#include "inet/physicallayer/ieee80211/Ieee80211OFDMCode.h"
 
 namespace inet {
 namespace physicallayer {
@@ -31,9 +32,28 @@ Ieee80211HTCode::Ieee80211HTCode(
 
 }
 
-//const Ieee80211ConvolutionalCode Ieee80211HTCompliantSignalCodes::htConvolutionalCode1_2(1,2);
-//const Ieee80211OFDMInterleaving Ieee80211HTCompliantSignalCodes::htBPSKInterleaving(52,1);
+const Ieee80211HTCode* Ieee80211HTCompliantCodes::getCompliantCode(const Ieee80211ConvolutionalCode *convolutionalCode, const Ieee80211OFDMModulation *stream1Modulation, const Ieee80211OFDMModulation *stream2Modulation, const Ieee80211OFDMModulation *stream3Modulation, const Ieee80211OFDMModulation *stream4Modulation, Hz bandwidth, bool withScrambling)
+{
+    std::vector<unsigned int> numberOfCodedBitsPerSpatialStreams;
+    if (stream1Modulation)
+        numberOfCodedBitsPerSpatialStreams.push_back(stream1Modulation->getSubcarrierModulation()->getCodeWordSize());
+    if (stream2Modulation)
+        numberOfCodedBitsPerSpatialStreams.push_back(stream2Modulation->getSubcarrierModulation()->getCodeWordSize());
+    if (stream3Modulation)
+        numberOfCodedBitsPerSpatialStreams.push_back(stream3Modulation->getSubcarrierModulation()->getCodeWordSize());
+    if (stream4Modulation)
+        numberOfCodedBitsPerSpatialStreams.push_back(stream4Modulation->getSubcarrierModulation()->getCodeWordSize());
+    return withScrambling ? new Ieee80211HTCode(convolutionalCode, new Ieee80211HTInterleaving(numberOfCodedBitsPerSpatialStreams, bandwidth), &Ieee80211OFDMCompliantCodes::ofdmScrambling) :
+                            new Ieee80211HTCode(convolutionalCode, new Ieee80211HTInterleaving(numberOfCodedBitsPerSpatialStreams, bandwidth), nullptr);
+}
+
+Ieee80211HTCode::~Ieee80211HTCode()
+{
+    // NOTE: We assume that convolutional code and scrambling are static variables
+    delete interleaving;
+}
+
+const Ieee80211ConvolutionalCode Ieee80211HTCompliantCodes::htConvolutionalCode5_6(5,6);
 
 } /* namespace physicallayer */
 } /* namespace inet */
-

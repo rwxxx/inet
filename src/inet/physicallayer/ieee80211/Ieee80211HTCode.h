@@ -22,6 +22,7 @@
 #include "inet/physicallayer/ieee80211/layered/Ieee80211HTInterleaving.h"
 #include "inet/physicallayer/ieee80211/layered/Ieee80211ConvolutionalCode.h"
 #include "inet/physicallayer/common/layered/AdditiveScrambling.h"
+#include "inet/physicallayer/ieee80211/Ieee80211OFDMModulation.h"
 
 namespace inet {
 namespace physicallayer {
@@ -39,14 +40,21 @@ class INET_API Ieee80211HTCode : public ICode
         const IForwardErrorCorrection *getForwardErrorCorrection() const { return forwardErrorCorrection; }
         const AdditiveScrambling *getScrambling() const { return scrambling; }
         const Ieee80211HTInterleaving *getInterleaving() const { return interleaving; }
+
+        virtual ~Ieee80211HTCode();
+
 };
 
-//class INET_API Ieee80211HTCompliantSignalCodes
-//{
-//    public:
-//        static const Ieee80211ConvolutionalCode htConvolutionalCode1_2;
-//        static const Ieee80211HTInterleaving htBPSKInterleaving;
-//};
+class INET_API Ieee80211HTCompliantCodes
+{
+    public:
+        // Convolutional codes (TODO: LDPC codes).
+        // Note: 1/2, 2/3, 3/4 rates are defined in Ieee80211OFDMCompliantCodes.
+        static const Ieee80211ConvolutionalCode htConvolutionalCode5_6;
+
+        static const Ieee80211HTCode *getCompliantCode(const Ieee80211ConvolutionalCode *convolutionalCode, const Ieee80211OFDMModulation *stream1Modulation, const Ieee80211OFDMModulation *stream2Modulation, const Ieee80211OFDMModulation *stream3Modulation, const Ieee80211OFDMModulation *stream4Modulation, Hz bandwidth, bool withScrambling = true);
+
+};
 
 } /* namespace physicallayer */
 } /* namespace inet */

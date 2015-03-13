@@ -20,8 +20,7 @@
 
 #include "inet/physicallayer/ieee80211/mode/IIeee80211Mode.h"
 #include "inet/physicallayer/ieee80211/mode/Ieee80211OFDMMode.h"
-#include "inet/physicallayer/ieee80211/Ieee80211HTDataCode.h"
-#include "inet/physicallayer/ieee80211/Ieee80211HTSignalCode.h"
+#include "inet/physicallayer/ieee80211/Ieee80211HTCode.h"
 
 namespace inet {
 namespace physicallayer {
@@ -77,7 +76,7 @@ class INET_API Ieee80211HTModeBase
 class INET_API Ieee80211HTSignalMode : public IIeee80211HeaderMode, public Ieee80211HTModeBase, public Ieee80211HTTimingRelatedParametersBase
 {
     protected:
-        const Ieee80211HTSignalCode *code;
+        const Ieee80211HTCode *code;
         const Ieee80211OFDMModulation *modulation;
 
     protected:
@@ -163,7 +162,7 @@ class INET_API Ieee80211HTPreambleMode : public IIeee80211PreambleMode, public I
 class INET_API Ieee80211HTDataMode : public IIeee80211DataMode, public Ieee80211HTModeBase, public Ieee80211HTTimingRelatedParametersBase
 {
     protected:
-        const Ieee80211HTDataCode *code;
+        const Ieee80211HTCode *code;
         const Ieee80211OFDMModulation *stream1Modulation;
         const Ieee80211OFDMModulation *stream2Modulation;
         const Ieee80211OFDMModulation *stream3Modulation;
@@ -177,9 +176,9 @@ class INET_API Ieee80211HTDataMode : public IIeee80211DataMode, public Ieee80211
         unsigned int computeNumberOfSpatialStreams(const Ieee80211OFDMModulation* stream1Modulation, const Ieee80211OFDMModulation* stream2Modulation, const Ieee80211OFDMModulation* stream3Modulation, const Ieee80211OFDMModulation* stream4Modulation) const;
 
     public:
-        Ieee80211HTDataMode(unsigned int modulationAndCodingScheme, unsigned int numberOfBCCEncoders, const Ieee80211HTDataCode *code, const Ieee80211OFDMModulation *stream1Modulation, const Ieee80211OFDMModulation *stream2Modulation, const Ieee80211OFDMModulation *stream3Modulation, const Ieee80211OFDMModulation *stream4Modulation, const Hz bandwidth, GuardIntervalType guardIntervalType);
+        Ieee80211HTDataMode(unsigned int modulationAndCodingScheme, unsigned int numberOfBCCEncoders, const Ieee80211HTCode *code, const Ieee80211OFDMModulation *stream1Modulation, const Ieee80211OFDMModulation *stream2Modulation, const Ieee80211OFDMModulation *stream3Modulation, const Ieee80211OFDMModulation *stream4Modulation, const Hz bandwidth, GuardIntervalType guardIntervalType);
 
-        const Ieee80211HTDataCode* getCode() const { return code; }
+        const Ieee80211HTCode* getCode() const { return code; }
         const Ieee80211OFDMModulation* getStream1Modulation() const { return stream1Modulation; }
         const Ieee80211OFDMModulation* getStream2Modulation() const { return stream2Modulation; }
         const Ieee80211OFDMModulation* getStream3Modulation() const { return stream3Modulation; }

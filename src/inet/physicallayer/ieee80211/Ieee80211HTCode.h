@@ -19,28 +19,34 @@
 #define __INET_IEEE80211HTSIGNALCODE_H
 
 #include "inet/physicallayer/contract/layered/ICode.h"
-#include "inet/physicallayer/ieee80211/layered/Ieee80211OFDMInterleaving.h"
+#include "inet/physicallayer/ieee80211/layered/Ieee80211HTInterleaving.h"
 #include "inet/physicallayer/ieee80211/layered/Ieee80211ConvolutionalCode.h"
 #include "inet/physicallayer/common/layered/AdditiveScrambling.h"
 
 namespace inet {
 namespace physicallayer {
 
-class INET_API Ieee80211HTSignalCode : public ICode
+class INET_API Ieee80211HTCode : public ICode
 {
     protected:
         const IForwardErrorCorrection *forwardErrorCorrection;
-        const Ieee80211OFDMInterleaving *interleaving;
+        const Ieee80211HTInterleaving *interleaving;
         const AdditiveScrambling *scrambling;
 
     public:
-        Ieee80211HTSignalCode(const IForwardErrorCorrection *forwardErrorCorrection, const Ieee80211OFDMInterleaving *interleaving, const AdditiveScrambling *scrambling);
+        Ieee80211HTCode(const IForwardErrorCorrection *forwardErrorCorrection, const Ieee80211HTInterleaving *interleaving, const AdditiveScrambling *scrambling);
 
         const IForwardErrorCorrection *getForwardErrorCorrection() const { return forwardErrorCorrection; }
         const AdditiveScrambling *getScrambling() const { return scrambling; }
-        const Ieee80211OFDMInterleaving *getInterleaving() const { return interleaving; }
+        const Ieee80211HTInterleaving *getInterleaving() const { return interleaving; }
 };
-};
+
+//class INET_API Ieee80211HTCompliantSignalCodes
+//{
+//    public:
+//        static const Ieee80211ConvolutionalCode htConvolutionalCode1_2;
+//        static const Ieee80211HTInterleaving htBPSKInterleaving;
+//};
 
 } /* namespace physicallayer */
 } /* namespace inet */

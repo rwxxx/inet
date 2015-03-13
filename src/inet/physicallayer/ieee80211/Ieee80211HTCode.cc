@@ -15,26 +15,24 @@
 // along with this program; if not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "inet/physicallayer/ieee80211/Ieee80211HTDataCode.h"
+#include "inet/physicallayer/ieee80211/Ieee80211HTCode.h"
 
 namespace inet {
 namespace physicallayer {
 
-Ieee80211HTDataCode::Ieee80211HTDataCode(
+Ieee80211HTCode::Ieee80211HTCode(
         const IForwardErrorCorrection* forwardErrorCorrection,
-        const Ieee80211OFDMInterleaving* interleaving1,
-        const Ieee80211OFDMInterleaving* interleaving2,
-        const Ieee80211OFDMInterleaving* interleaving3,
-        const Ieee80211OFDMInterleaving* interleaving4,
+        const Ieee80211HTInterleaving* interleaving,
         const AdditiveScrambling* scrambling) :
                 forwardErrorCorrection(forwardErrorCorrection),
-                interleaving1(interleaving1),
-                interleaving2(interleaving2),
-                interleaving3(interleaving3),
-                interleaving4(interleaving4),
+                interleaving(interleaving),
                 scrambling(scrambling)
 {
+
 }
+
+//const Ieee80211ConvolutionalCode Ieee80211HTCompliantSignalCodes::htConvolutionalCode1_2(1,2);
+//const Ieee80211OFDMInterleaving Ieee80211HTCompliantSignalCodes::htBPSKInterleaving(52,1);
 
 } /* namespace physicallayer */
 } /* namespace inet */

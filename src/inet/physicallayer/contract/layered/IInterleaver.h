@@ -25,8 +25,10 @@ namespace inet {
 
 namespace physicallayer {
 
-class INET_API IInterleaving : public IPrintableObject
+class INET_API IInterleaving
 {
+    public:
+        virtual ~IInterleaving() {}
 };
 
 class INET_API IInterleaver : public IPrintableObject

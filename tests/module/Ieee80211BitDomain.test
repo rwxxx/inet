@@ -20,7 +20,7 @@ The testing process is as follows:
 
 import ieee80211.Ieee80211BitDomainTest;
 import inet.physicallayer.common.layered.ConvolutionalCoder;
-import inet.physicallayer.ieee80211.layered.Ieee80211Interleaver;
+import inet.physicallayer.ieee80211.layered.Ieee80211OFDMInterleaver;
 import inet.physicallayer.common.layered.AdditiveScrambler;
 
 network BitDomainTest
@@ -28,7 +28,7 @@ network BitDomainTest
     submodules:
         convolutionalCoder: ConvolutionalCoder;
         ieee80211BitDomainTest: Ieee80211BitDomainTest;
-        interleaver: Ieee80211Interleaver;
+        interleaver: Ieee80211OFDMInterleaver;
         scrambler: AdditiveScrambler;
 }
 

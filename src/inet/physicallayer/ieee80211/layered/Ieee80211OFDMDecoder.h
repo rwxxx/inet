@@ -18,9 +18,9 @@
 #ifndef __INET_IEEE80211OFDMDECODER_H
 #define __INET_IEEE80211OFDMDECODER_H
 
-#include "inet/physicallayer/ieee80211/layered/Ieee80211Interleaver.h"
+#include "inet/physicallayer/ieee80211/layered/Ieee80211OFDMInterleaver.h"
 #include "inet/physicallayer/common/layered/AdditiveScrambler.h"
-#include "inet/physicallayer/ieee80211/layered/Ieee80211Interleaving.h"
+#include "inet/physicallayer/ieee80211/layered/Ieee80211OFDMInterleaving.h"
 #include "inet/physicallayer/common/layered/ConvolutionalCoder.h"
 #include "inet/physicallayer/ieee80211/Ieee80211OFDMCode.h"
 #include "inet/physicallayer/ieee80211/layered/Ieee80211ConvolutionalCode.h"

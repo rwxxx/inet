@@ -22,7 +22,7 @@ namespace physicallayer {
 
 Ieee80211HTSignalCode::Ieee80211HTSignalCode(
         const IForwardErrorCorrection* forwardErrorCorrection,
-        const Ieee80211Interleaving* interleaving,
+        const Ieee80211OFDMInterleaving* interleaving,
         const AdditiveScrambling* scrambling) :
                 forwardErrorCorrection(forwardErrorCorrection),
                 interleaving(interleaving),

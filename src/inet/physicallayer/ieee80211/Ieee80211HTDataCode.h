@@ -19,7 +19,7 @@
 #define __INET_IEEE80211HTDATACODE_H
 
 #include "inet/physicallayer/contract/layered/ICode.h"
-#include "inet/physicallayer/ieee80211/layered/Ieee80211Interleaving.h"
+#include "inet/physicallayer/ieee80211/layered/Ieee80211OFDMInterleaving.h"
 #include "inet/physicallayer/common/layered/ConvolutionalCode.h"
 #include "inet/physicallayer/common/layered/AdditiveScrambling.h"
 
@@ -30,20 +30,20 @@ class INET_API Ieee80211HTDataCode
 {
     protected:
         const IForwardErrorCorrection *forwardErrorCorrection;
-        const Ieee80211Interleaving *interleaving1;
-        const Ieee80211Interleaving *interleaving2;
-        const Ieee80211Interleaving *interleaving3;
-        const Ieee80211Interleaving *interleaving4;
+        const Ieee80211OFDMInterleaving *interleaving1;
+        const Ieee80211OFDMInterleaving *interleaving2;
+        const Ieee80211OFDMInterleaving *interleaving3;
+        const Ieee80211OFDMInterleaving *interleaving4;
         const AdditiveScrambling *scrambling;
 
     public:
-        Ieee80211HTDataCode(const IForwardErrorCorrection *forwardErrorCorrection, const Ieee80211Interleaving *interleaving1, const Ieee80211Interleaving *interleaving2, const Ieee80211Interleaving *interleaving3, const Ieee80211Interleaving *interleaving4,  const AdditiveScrambling *scrambling);
+        Ieee80211HTDataCode(const IForwardErrorCorrection *forwardErrorCorrection, const Ieee80211OFDMInterleaving *interleaving1, const Ieee80211OFDMInterleaving *interleaving2, const Ieee80211OFDMInterleaving *interleaving3, const Ieee80211OFDMInterleaving *interleaving4,  const AdditiveScrambling *scrambling);
 
         const IForwardErrorCorrection* getForwardErrorCorrection() const { return forwardErrorCorrection; }
-        const Ieee80211Interleaving* getInterleaving1() const { return interleaving1; }
-        const Ieee80211Interleaving* getInterleaving2() const { return interleaving2; }
-        const Ieee80211Interleaving* getInterleaving3() const { return interleaving3; }
-        const Ieee80211Interleaving* getInterleaving4() const { return interleaving4; }
+        const Ieee80211OFDMInterleaving* getInterleaving1() const { return interleaving1; }
+        const Ieee80211OFDMInterleaving* getInterleaving2() const { return interleaving2; }
+        const Ieee80211OFDMInterleaving* getInterleaving3() const { return interleaving3; }
+        const Ieee80211OFDMInterleaving* getInterleaving4() const { return interleaving4; }
         const AdditiveScrambling* getScrambling() const { return scrambling; }
 };
 

@@ -15,8 +15,8 @@
 // along with this program; if not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef __INET_IEEE80211INTERLEAVING_H
-#define __INET_IEEE80211INTERLEAVING_H
+#ifndef __INET_IEEE80211OFDMINTERLEAVING_H
+#define __INET_IEEE80211OFDMINTERLEAVING_H
 
 #include "inet/physicallayer/contract/layered/IInterleaver.h"
 
@@ -24,14 +24,14 @@ namespace inet {
 
 namespace physicallayer {
 
-class INET_API Ieee80211Interleaving : public IInterleaving
+class INET_API Ieee80211OFDMInterleaving : public IInterleaving
 {
   protected:
     int numberOfCodedBitsPerSymbol;
     int numberOfCodedBitsPerSubcarrier;
 
   public:
-    Ieee80211Interleaving(int numberOfCodedBitsPerSymbol, int numberOfCodedBitsPerSubcarrier) :
+    Ieee80211OFDMInterleaving(int numberOfCodedBitsPerSymbol, int numberOfCodedBitsPerSubcarrier) :
         numberOfCodedBitsPerSymbol(numberOfCodedBitsPerSymbol),
         numberOfCodedBitsPerSubcarrier(numberOfCodedBitsPerSubcarrier) {}
 
@@ -42,5 +42,5 @@ class INET_API Ieee80211Interleaving : public IInterleaving
 } /* namespace physicallayer */
 } /* namespace inet */
 
-#endif // ifndef __INET_IEEE80211INTERLEAVING_H
+#endif // ifndef __INET_IEEE80211OFDMINTERLEAVING_H
 

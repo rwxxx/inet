@@ -234,7 +234,7 @@ const simtime_t Ieee80211HTDataMode::getDuration(int dataBitLength) const
     unsigned int numberOfCodedBitsPerSymbol = numberOfCodedBitsPerSubcarrierSum * getNumberOfDataSubcarriers();
     const IForwardErrorCorrection *forwardErrorCorrection = code ? code->getForwardErrorCorrection() : nullptr;
     unsigned int dataBitsPerSymbol = forwardErrorCorrection ? forwardErrorCorrection->getDecodedLength(numberOfCodedBitsPerSymbol) : numberOfCodedBitsPerSymbol;
-    int numberOfSymbols = lrint(ceil((double)getBitLength(dataBitLength) / dataBitsPerSymbol));
+    int numberOfSymbols = lrint(ceil((double)getBitLength(dataBitLength) / dataBitsPerSymbol)); // TODO: getBitLength(dataBitLength) should be divisible by dataBitsPerSymbol
     return numberOfSymbols * getSymbolInterval();
 }
 
